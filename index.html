@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MakeThe</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
+    <style>
+        /* Common styles for larger screens */
+        .table-container {
+            width: 82%;
+            max-height: 400px;
+            overflow: auto;
+        }
+    
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+    
+        table, th, td {
+            border: 1px solid black;
+        }
+    
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+    
+        /* Styles for smaller screens */
+        @media only screen and (max-width: 768px) {
+            .container {
+                display: flex;
+                flex-direction: column;
+            }
+    
+            .navbar {
+                flex-direction: column;
+                align-items: center;
+            }
+    
+            nav {
+                margin-top: 10px;
+            }
+    
+            .card {
+                width: 100%;
+            }
+    
+            .table-container {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <aside>
+            <div class="navbar">
+                <div class="user-logo">
+                    <img src="https://static8.depositphotos.com/1012223/980/i/950/depositphotos_9803930-stock-photo-demo-cubes.jpg" />
+                </div>
+                <nav>
+                    <ul>
+                        <li name="distributor">Distributor</li>
+                        <li class="selectedLink" name="outlet">Outlet</li>
+                        <li name="distmat">Distance Matrix</li>
+                        <li name="planner">Planner</li>
+                        <li name="output">Output Screen</li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+        <main>
+            <div class="card distributor" data-distributor>
+                <div class="title">Distributor page</div>
+                <div class="content">Content Goes Here</div>
+            </div>
+            
+            <div class="card active outlet" data-outlet>
+                <div class="title">Outlet page</div>
+                <div class="content">
+                    <label for="excelFile">Choose an Excel file:</label>
+                    <br>
+                    <br>
+                    <input type="file" id="fileInput" name="excelFile" accept=".xlsx, .xls">
+                    <br>
+                    <div class="table-container">
+                        <table id="excelData"></table>
+                    </div>
+                </div>
+            </div>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.8/xlsx.full.min.js"></script>
+            <script>
+                document.getElementById('fileInput').addEventListener('change', function (e) {
+                    var file = e.target.files[0];
+                    if (file) {
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            var data = e.target.result;
+                            var workbook = XLSX.read(data, { type: 'binary' });
+                            var sheet_name_list = workbook.SheetNames;
+                            var sheet = sheet_name_list[0];
+                            var htmlstr = XLSX.write(workbook, { sheet: sheet, type: 'string', bookType: 'html' });
+
+                            // Display the Excel data as HTML in the table
+                            document.getElementById('excelData').innerHTML = htmlstr;
+                        };
+                        reader.readAsBinaryString(file);
+                    }
+                });
+            </script>
+
+            <div class="card distmat" data-distmat>
+                <div class="title">Distance Matrix Page</div>
+                <div class="content">Content Goes Here</div>
+            </div>
+            <div class="card planner" data-planner>
+                <div class="title">Planner Page</div>
+                <div class="content">Content Goes Here</div>
+            </div>
+            <div class="card output" data-output>
+                <div class="title">Output Page</div>
+                <div class="content">Content Goes Here</div>
+            </div>
+        </main>
+    </div>
+    <script>
+        const showMessage = () => {
+            alert("Hello JavaScript");
+        };
+    </script>
+</body>
+</html>
